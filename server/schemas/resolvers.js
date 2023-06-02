@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User} = require('../models');
+const { User } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -19,7 +19,7 @@ const resolvers = {
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
-      if (!profile) {
+      if (!user) {
         throw new AuthenticationError('No profile with this email found!');
       }
 
@@ -30,7 +30,7 @@ const resolvers = {
       }
 
       const token = signToken(user);
-      return { token, profile };
+      return { token, user };
     },
 
     addUser: async (parent, args) => {
@@ -38,7 +38,7 @@ const resolvers = {
       const token =signToken(user);
 
 
-      return {user, token};
+      return {token, user};
     },
     saveBook: async (parent, { input }, { user } ) => {
         if (user) {
